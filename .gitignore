@@ -1,0 +1,6 @@
+# files for git to ignore
+*.log
+*.o
+*.mod
+*.pyc
+
