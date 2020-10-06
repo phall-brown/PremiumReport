@@ -19,6 +19,23 @@ def get_members(group_list):
  
     return username 
 
+def get_premium(username,groupnames):
+    account=[]
+# Get list of all groups to which user belongs
+    proc=subprocess.Popen(['id','-Gn',username],
+                           stdout=subprocess.PIPE,
+                           stderr=subprocess.STDOUT,
+                           encoding='utf-8')
+    out,err=proc.communicate()
+    groups=list(out.strip('\n').split(" ")) 
+    for group in groupnames:
+        if group in groups:
+            account.append('Y')
+    if not account:
+        account.append('-')
+
+    return account
+
 def get_account_types(username):
     """
     Returns a list of current account types associated with the specified user.
@@ -130,6 +147,11 @@ name={}
 email={}
 accounts={}
 primary={}
+account_priority={}
+account_priorityp={}
+account_prigpu={}
+account_prigpup={}
+account_gpuhe={}
 
 # constants
 # oscar group names for premium account types
@@ -157,11 +179,29 @@ for user in username:
     email[user]=get_user_email(user)
     accounts[user]=get_account_types(user)
     primary[user]=get_group(user)
+    account_priority[user]=get_premium(user,priority)
+    account_priorityp[user]=get_premium(user,priorityp)
+    account_prigpu[user]=get_premium(user,prigpu)
+    account_prigpup[user]=get_premium(user,prigpup)
+    account_gpuhe[user]=get_premium(user,gpuhe)
+
+# convert dicts to pandas dataframes 
+name_df=pd.DataFrame.from_dict(name,orient='index',columns=['Name'])
+email_df=pd.DataFrame.from_dict(email,orient='index',columns=['Email'])
+primary_df=pd.DataFrame.from_dict(primary,orient='index',columns=['Group'])
+account_priority_df=pd.DataFrame.from_dict(account_priority,orient='index',columns=['priority'])
+account_priorityp_df=pd.DataFrame.from_dict(account_priorityp,orient='index',columns=['priority+'])
+account_prigpu_df=pd.DataFrame.from_dict(account_prigpu,orient='index',columns=['pri-gpu'])
+account_prigpup_df=pd.DataFrame.from_dict(account_prigpup,orient='index',columns=['pri-gpu+'])
+account_gpuhe_df=pd.DataFrame.from_dict(account_gpuhe,orient='index',columns=['gpu-he'])
+
+# combine dataframes into a single dataframe
+data=pd.concat([name_df,email_df,primary_df,account_priority_df,account_priorityp_df,
+               account_prigpu_df,account_prigpup_df,account_gpuhe_df],
+               axis=1,ignore_index=False) 
  
 # write out dtaa as a csv file
-print(username)
-print(name)
-print(email)
-print(accounts)
-print(primary)
+#print(accounts)
+#print(data)
 
+data.to_csv('premium_accounts.csv')
