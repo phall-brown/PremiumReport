@@ -77,6 +77,9 @@ def get_account_types(username):
     for group in gpuhe:
       if group in groups:
         accounts.append('gpu-he')
+    for group in gpuhe:
+      if group in groups:
+        accounts.append('pri-bigmem')
 
     # Add indicator to handle users with no premium account(s)
     if not accounts:
@@ -137,6 +140,25 @@ def get_group(username):
 
     return output
 
+def get_lastlogin(username):
+    """
+    Returns month and year of last login
+    """
+# Get list of all groups to which user belongs
+    proc=subprocess.Popen(['lastlog','-u',username],
+                           stdout=subprocess.PIPE,
+                           stderr=subprocess.STDOUT,
+                           encoding='utf-8')
+    out,err=proc.communicate()
+#    groups=list(out.strip('\n').split(" ")) 
+#    for group in groupnames:
+#        if group in groups:
+#            account.append('Y')
+#    if not account:
+#        account.append('-')
+
+    return output
+
 ##############
 # MAIN PROGRAM
 ##############
@@ -152,6 +174,7 @@ account_priorityp={}
 account_prigpu={}
 account_prigpup={}
 account_gpuhe={}
+account_pribigmem={}
 
 # constants
 # oscar group names for premium account types
@@ -163,6 +186,8 @@ priorityp=['priority+','priority+1']
 prigpu=['pri-gpu','pri-gpu1']
 prigpup=['pri-gpu+','pri-gpu+1']
 gpuhe=['gpu-he','gpu-he1']
+# Bigmem accounts
+pribigmem=['pri-bigmem','pri-bigmem1']
 
 # determine users with premium accounts
 username.extend(get_members(priority))
@@ -170,6 +195,7 @@ username.extend(get_members(priorityp))
 username.extend(get_members(prigpu))
 username.extend(get_members(prigpup))
 username.extend(get_members(gpuhe))
+username.extend(get_members(pribigmem))
 username=list(set(username))                  # eliminate duplicates
 username.sort()                               # sort alphabetically
 
@@ -184,6 +210,7 @@ for user in username:
     account_prigpu[user]=get_premium(user,prigpu)
     account_prigpup[user]=get_premium(user,prigpup)
     account_gpuhe[user]=get_premium(user,gpuhe)
+    account_pribigmem[user]=get_premium(user,pribigmem)
 
 # convert dicts to pandas dataframes 
 name_df=pd.DataFrame.from_dict(name,orient='index',columns=['Name'])
@@ -194,13 +221,14 @@ account_priorityp_df=pd.DataFrame.from_dict(account_priorityp,orient='index',col
 account_prigpu_df=pd.DataFrame.from_dict(account_prigpu,orient='index',columns=['pri-gpu'])
 account_prigpup_df=pd.DataFrame.from_dict(account_prigpup,orient='index',columns=['pri-gpu+'])
 account_gpuhe_df=pd.DataFrame.from_dict(account_gpuhe,orient='index',columns=['gpu-he'])
+account_pribigmem_df=pd.DataFrame.from_dict(account_pribigmem,orient='index',columns=['pri-bigmem'])
 
 # combine dataframes into a single dataframe
 data=pd.concat([name_df,email_df,primary_df,account_priority_df,account_priorityp_df,
-               account_prigpu_df,account_prigpup_df,account_gpuhe_df],
+               account_prigpu_df,account_prigpup_df,account_gpuhe_df,account_pribigmem_df],
                axis=1,ignore_index=False) 
  
-# write out dtaa as a csv file
+# write out data as a csv file
 #print(accounts)
 #print(data)
 
