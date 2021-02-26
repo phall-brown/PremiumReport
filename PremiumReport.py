@@ -30,9 +30,9 @@ def get_premium(username,groupnames):
     groups=list(out.strip('\n').split(" ")) 
     for group in groupnames:
         if group in groups:
-            account.append('Y')
+            account.append('1')
     if not account:
-        account.append('-')
+        account.append('0')
 
     return account
 
