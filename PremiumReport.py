@@ -227,6 +227,7 @@ account_pribigmem_df=pd.DataFrame.from_dict(account_pribigmem,orient='index',col
 data=pd.concat([name_df,email_df,primary_df,account_priority_df,account_priorityp_df,
                account_prigpu_df,account_prigpup_df,account_gpuhe_df,account_pribigmem_df],
                axis=1,ignore_index=False) 
+data.index.name='Username'
  
 # write out data as a csv file
 #print(accounts)
