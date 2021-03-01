@@ -36,57 +36,6 @@ def get_premium(username,groupnames):
 
     return account
 
-def get_account_types(username):
-    """
-    Returns a list of current account types associated with the specified user.
-    """
-    accounts=[]
-    # Define premium account types (based on Linux groups)
-    # Priority accounts
-    priority=['priority','priority1','priority2','priority3','priority4',
-             'priority5','priority6','priority7','priority8','priority9']
-    priorityp=['priority+','priority+1']
-    # Premium GPU accounts
-    prigpu=['pri-gpu','pri-gpu1']
-    prigpup=['pri-gpu+','pri-gpu+1']
-    gpuhe=['gpu-he','gpu-he1']
-    # Bigmem accounts
-    pribigmem=['pri-bigmem','pri-bigmem1']
- 
-    # Get list of all groups to which user belongs
-    proc=subprocess.Popen(['id','-Gn',username],
-                           stdout=subprocess.PIPE,
-                           stderr=subprocess.STDOUT,
-                           encoding='utf-8')
-    out,err=proc.communicate()
-    groups=list(out.strip('\n').split(" ")) 
-    
-    # Determine if user belongs to any groups associated with premium accounts 
-    for group in priority:
-      if group in groups:
-        accounts.append('priority')
-    for group in priorityp:
-      if group in groups:
-        accounts.append('priority+')
-    for group in prigpu:
-      if group in groups:
-        accounts.append('pri-gpu')
-    for group in prigpup:
-      if group in groups:
-        accounts.append('pri-gpu+')
-    for group in gpuhe:
-      if group in groups:
-        accounts.append('gpu-he')
-    for group in gpuhe:
-      if group in groups:
-        accounts.append('pri-bigmem')
-
-    # Add indicator to handle users with no premium account(s)
-    if not accounts:
-      accounts.append('-')
-
-    return accounts
-
 def get_user_name(username):
     """
     Returns user's name
@@ -167,7 +116,6 @@ def get_lastlogin(username):
 username=[]
 name={}
 email={}
-accounts={}
 primary={}
 account_priority={}
 account_priorityp={}
@@ -203,7 +151,6 @@ username.sort()                               # sort alphabetically
 for user in username:
     name[user]=get_user_name(user)
     email[user]=get_user_email(user)
-    accounts[user]=get_account_types(user)
     primary[user]=get_group(user)
     account_priority[user]=get_premium(user,priority)
     account_priorityp[user]=get_premium(user,priorityp)
@@ -229,8 +176,5 @@ data=pd.concat([name_df,email_df,primary_df,account_priority_df,account_priority
                axis=1,ignore_index=False) 
 data.index.name='Username'
  
-# write out data as a csv file
-#print(accounts)
-#print(data)
-
+# write out data to a csv file
 data.to_csv('premium_accounts.csv')
