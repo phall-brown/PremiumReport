@@ -121,7 +121,9 @@ account_priority={}
 account_priorityp={}
 account_prigpu={}
 account_prigpup={}
+account_prigpupp={}
 account_gpuhe={}
+account_gpuhep={}
 account_pribigmem={}
 
 # constants
@@ -133,7 +135,9 @@ priorityp=['priority+','priority+1']
 # premium GPU accounts
 prigpu=['pri-gpu','pri-gpu1']
 prigpup=['pri-gpu+','pri-gpu+1']
+prigpupp=['pri-gpu++','pri-gpu++1']
 gpuhe=['gpu-he','gpu-he1']
+gpuhep=['gpu-he+','gpu-he+1']
 # Bigmem accounts
 pribigmem=['pri-bigmem','pri-bigmem1']
 
@@ -142,7 +146,9 @@ username.extend(get_members(priority))
 username.extend(get_members(priorityp))
 username.extend(get_members(prigpu))
 username.extend(get_members(prigpup))
+username.extend(get_members(prigpupp))
 username.extend(get_members(gpuhe))
+username.extend(get_members(gpuhep))
 username.extend(get_members(pribigmem))
 username=list(set(username))                  # eliminate duplicates
 username.sort()                               # sort alphabetically
@@ -156,7 +162,9 @@ for user in username:
     account_priorityp[user]=get_premium(user,priorityp)
     account_prigpu[user]=get_premium(user,prigpu)
     account_prigpup[user]=get_premium(user,prigpup)
+    account_prigpupp[user]=get_premium(user,prigpupp)
     account_gpuhe[user]=get_premium(user,gpuhe)
+    account_gpuhep[user]=get_premium(user,gpuhep)
     account_pribigmem[user]=get_premium(user,pribigmem)
 
 # convert dicts to pandas dataframes 
@@ -167,12 +175,15 @@ account_priority_df=pd.DataFrame.from_dict(account_priority,orient='index',colum
 account_priorityp_df=pd.DataFrame.from_dict(account_priorityp,orient='index',columns=['priority+'])
 account_prigpu_df=pd.DataFrame.from_dict(account_prigpu,orient='index',columns=['pri-gpu'])
 account_prigpup_df=pd.DataFrame.from_dict(account_prigpup,orient='index',columns=['pri-gpu+'])
+account_prigpupp_df=pd.DataFrame.from_dict(account_prigpupp,orient='index',columns=['pri-gpu++'])
 account_gpuhe_df=pd.DataFrame.from_dict(account_gpuhe,orient='index',columns=['gpu-he'])
+account_gpuhep_df=pd.DataFrame.from_dict(account_gpuhep,orient='index',columns=['gpu-he+'])
 account_pribigmem_df=pd.DataFrame.from_dict(account_pribigmem,orient='index',columns=['pri-bigmem'])
 
 # combine dataframes into a single dataframe
 data=pd.concat([name_df,email_df,primary_df,account_priority_df,account_priorityp_df,
-               account_prigpu_df,account_prigpup_df,account_gpuhe_df,account_pribigmem_df],
+               account_prigpu_df,account_prigpup_df,account_prigpupp_df,
+               account_gpuhe_df,account_gpuhep_df,account_pribigmem_df],
                axis=1,ignore_index=False) 
 data.index.name='Username'
  
