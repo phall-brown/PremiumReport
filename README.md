@@ -1,10 +1,10 @@
-#PremiumReport
+# PremiumReport
 
 Identifes all users who currently have a premium account on Oscar, based on their group membership.
 
 Note: the group names associated with each of the various premium accounts are hard-coded. This portion of the code should be checked before use to ensure that all active premium groups are included, since these can be added to the system without notice.
 
-#Output
+# Output
 File is output as a plain text csv file with a header line (filename: premium_accounts.csv). Contents are as follows:
 
 Column 1: Username
@@ -24,7 +24,7 @@ For each premium account type, if the user has that account type (i.e., is a mem
 
 If a user is missing information in the directory (e.g., no email address on record on Oscar), a value of "NA" is returned for that field.
 
-#Usage
+# Usage
 Required python packages: pandas
 
 python PremiumReports.py
