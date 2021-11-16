@@ -13,13 +13,13 @@ Column 3: Email address
 Column 4: User's Primary Group  
 Column 5: priority account  
 Column 6: priority+ account  
-Column 6: priority++ account  
-Column 7: pri-gpu account  
-Column 8: pri-gpu+ account  
-Column 9: pri-gpu++ account  
-Column 10: gpu-he account  
-Column 11: gpu-he+ account  
-Column 12: pri-bigmem account  
+Column 7: priority++ account  
+Column 8: pri-gpu account  
+Column 9: pri-gpu+ account  
+Column 10: pri-gpu++ account  
+Column 11: gpu-he account  
+Column 12: gpu-he+ account  
+Column 13: pri-bigmem account  
 
 For each premium account type, if the user has that account type (i.e., is a member of a corresponding group), a value of "1" is reported. If the user does no have that account type, a value of "0" is reported.
 
