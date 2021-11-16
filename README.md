@@ -13,6 +13,7 @@ Column 3: Email address
 Column 4: User's Primary Group  
 Column 5: priority account  
 Column 6: priority+ account  
+Column 6: priority++ account  
 Column 7: pri-gpu account  
 Column 8: pri-gpu+ account  
 Column 9: pri-gpu++ account  
